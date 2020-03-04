@@ -22,6 +22,7 @@ val textColor : Int = Color.parseColor("#FFFFFF")
 val sizeFactor : Float = 5.8f
 val fontSizeFactor : Float = 2.3f
 val delay : Long = 40
+val backColor : Int = Color.parseColor("#BDBDBD")
 
 fun Canvas.drawNumberBox(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
@@ -170,6 +171,27 @@ class NumberBoxesView(ctx : Context) : View(ctx) {
             }
             box?.startUpdating(cb)
         }
+    }
 
+    data class Renderer(var view : NumberBoxesView) {
+
+        private val boxes : Boxes = Boxes()
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            boxes.draw(canvas, paint)
+            animator.animate {
+                boxes.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            boxes.startUpdating {
+                animator.start()
+            }
+        }
     }
 }
