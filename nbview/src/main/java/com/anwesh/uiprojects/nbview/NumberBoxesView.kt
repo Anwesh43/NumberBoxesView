@@ -66,10 +66,10 @@ class NumberBoxesView(ctx : Context) : View(ctx) {
             }
         }
 
-        fun startUpdating(cb : () -> Unit) {
+        fun startUpdating(cb : (Float) -> Unit) {
             if (dir == 0f) {
                 dir = 1f - 2 * prevScale
-                cb()
+                cb(scale)
             }
         }
     }
@@ -99,6 +99,21 @@ class NumberBoxesView(ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+
+    data class Box(var i : Int, val state : State = State()) {
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawNumberBox(i, state.scale, paint)
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            state.update(cb)
+        }
+
+        fun startUpdating(cb : (Float) -> Unit) {
+            state.startUpdating(cb)
         }
     }
 }
