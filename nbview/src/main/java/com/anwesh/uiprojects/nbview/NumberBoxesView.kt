@@ -195,4 +195,13 @@ class NumberBoxesView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : NumberBoxesView {
+            val view : NumberBoxesView = NumberBoxesView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
