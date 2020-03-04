@@ -13,6 +13,8 @@ import android.graphics.Color
 import android.content.Context
 import android.app.Activity
 
+import kotlin.collections.ArrayList
+
 val boxes : Int = 6
 val scGap : Float = 0.02f
 val boxColor : Int = Color.parseColor("#4CAF50")
@@ -115,5 +117,59 @@ class NumberBoxesView(ctx : Context) : View(ctx) {
         fun startUpdating(cb : (Float) -> Unit) {
             state.startUpdating(cb)
         }
+    }
+
+    data class Boxes(private var upBoxes : ArrayList<Box?> = ArrayList(), private val downBoxes : ArrayList<Box?> = ArrayList(boxes)) {
+
+        private var box : Box? = null
+        private var dir : Int = 1
+        init {
+            for (i in 0..(boxes - 1)) {
+                upBoxes.add(Box(i))
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            upBoxes.forEach {
+                it?.draw(canvas, paint)
+            }
+
+            downBoxes.forEach {
+                it?.draw(canvas, paint)
+            }
+            box?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            box?.update {
+
+                when(it) {
+                    0f -> {
+                        upBoxes.add(box)
+                        if (downBoxes.size == 0) {
+                            dir = 1
+                        }
+                    }
+                    1f -> {
+                        downBoxes.add(box)
+                        if (upBoxes.size  == 0) {
+                            dir = -1
+                        }
+                    }
+                }
+                box = null
+            }
+        }
+
+        fun startUpdating(cb : (Float) -> Unit) {
+            if (dir == 1 && upBoxes.size > 0) {
+                box = upBoxes.removeAt(upBoxes.size - 1)
+            }
+            if (dir == -1 && downBoxes.size > 0) {
+                box = downBoxes.removeAt(downBoxes.size - 1)
+            }
+            box?.startUpdating(cb)
+        }
+
     }
 }
