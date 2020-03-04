@@ -21,7 +21,7 @@ val boxColor : Int = Color.parseColor("#4CAF50")
 val textColor : Int = Color.parseColor("#FFFFFF")
 val sizeFactor : Float = 5.8f
 val fontSizeFactor : Float = 2.3f
-val delay : Long = 40
+val delay : Long = 15
 val backColor : Int = Color.parseColor("#BDBDBD")
 
 fun Canvas.drawNumberBox(i : Int, scale : Float, paint : Paint) {
@@ -160,6 +160,7 @@ class NumberBoxesView(ctx : Context) : View(ctx) {
                     }
                 }
                 box = null
+                cb(it)
             }
         }
 
